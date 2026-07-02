@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Scans your NeetCode 150 submissions repo and auto-updates the README stats.
 
@@ -61,6 +61,82 @@ foreach ($t in $data.topics) {
     }
 }
 
+# ---------------------------------------------------------------- fuzzy matching
+# NeetCode's auto-sync uses its own slugified titles (e.g. "invert-a-binary-tree"),
+# which don't always match LeetCode slugs in problems.json. We tolerate that with
+# an IDF-weighted token-set Jaccard match when the exact key lookup fails.
+# IDF weighting is critical: without it, "binary" + "tree" (common tokens) cause
+# ties between e.g. "subtree-of-another-tree" and "balanced-binary-tree".
+$stopwords = @{ 'a'=1; 'an'=1; 'the'=1; 'of'=1; 'in'=1; 'to'=1; 'for'=1; 'and'=1; 'on'=1; 'with'=1 }
+
+function Get-SlugTokens([string]$slug) {
+    $parts = $slug.ToLowerInvariant() -split '-'
+    return @($parts | Where-Object { $_ -and -not $stopwords.ContainsKey($_) } | Sort-Object -Unique)
+}
+
+$slugTokens = @{}
+$docFreq    = @{}
+foreach ($k in $slugMap.Keys) {
+    $toks = Get-SlugTokens $k
+    $slugTokens[$k] = $toks
+    foreach ($t in $toks) {
+        if ($docFreq.ContainsKey($t)) { $docFreq[$t]++ } else { $docFreq[$t] = 1 }
+    }
+}
+# Weight = 1 / doc_freq. Rare tokens ~1.0, ubiquitous ones (binary, tree) approach 0.
+function Get-TokenWeight([string]$tok) {
+    if ($script:docFreq.ContainsKey($tok)) { return 1.0 / $script:docFreq[$tok] }
+    return 1.0  # unseen token (from folder side) counts as fully novel
+}
+
+$fuzzyCache = @{}
+$fuzzyHits  = 0
+
+function Resolve-Slug([string]$folderSlug) {
+    $folderSlug = $folderSlug.ToLowerInvariant()
+    if ($script:slugMap.ContainsKey($folderSlug))    { return $script:slugMap[$folderSlug] }
+    if ($script:fuzzyCache.ContainsKey($folderSlug)) { return $script:fuzzyCache[$folderSlug] }
+
+    $folderTokens = Get-SlugTokens $folderSlug
+    if ($folderTokens.Count -eq 0) { $script:fuzzyCache[$folderSlug] = $null; return $null }
+    $folderSet = New-Object 'System.Collections.Generic.HashSet[string]'
+    foreach ($t in $folderTokens) { [void]$folderSet.Add($t) }
+
+    $bestScore = 0.0; $bestKey = $null; $secondScore = 0.0
+    foreach ($k in $script:slugTokens.Keys) {
+        $catTokens = $script:slugTokens[$k]
+        if ($catTokens.Count -eq 0) { continue }
+
+        $wInter = 0.0; $wUnion = 0.0
+        # Union = every catalog token (each contributes its weight)
+        foreach ($tok in $catTokens) { $wUnion += Get-TokenWeight $tok }
+        # Add folder-only tokens (tokens in folder but not in catalog) to union
+        foreach ($tok in $folderTokens) {
+            if ($catTokens -notcontains $tok) { $wUnion += Get-TokenWeight $tok }
+        }
+        # Intersection = tokens present in both
+        foreach ($tok in $catTokens) {
+            if ($folderSet.Contains($tok)) { $wInter += Get-TokenWeight $tok }
+        }
+
+        if ($wInter -le 0) { continue }
+        $score = $wInter / $wUnion
+        if     ($score -gt $bestScore)   { $secondScore = $bestScore; $bestScore = $score; $bestKey = $k }
+        elseif ($score -gt $secondScore) { $secondScore = $score }
+    }
+
+    # Require: (a) meaningful similarity, (b) strictly better than runner-up
+    if ($bestKey -and $bestScore -ge 0.4 -and $bestScore -gt $secondScore) {
+        Write-Host ("    fuzzy: {0}  ->  {1}  ({2:P0})" -f $folderSlug, $bestKey, $bestScore) -ForegroundColor DarkCyan
+        $script:fuzzyCache[$folderSlug] = $script:slugMap[$bestKey]
+        $script:fuzzyHits++
+        return $script:slugMap[$bestKey]
+    }
+
+    $script:fuzzyCache[$folderSlug] = $null
+    return $null
+}
+
 # ---------------------------------------------------------------- scan
 $sources = @()
 foreach ($sf in $data.sourceFolders) {
@@ -99,8 +175,8 @@ foreach ($pf in $problemFolders) {
     if ($files.Count -eq 0) { continue }
 
     $totalSolved++
-    if ($slugMap.ContainsKey($slug)) {
-        $meta = $slugMap[$slug]
+    $meta = Resolve-Slug $slug
+    if ($meta) {
         $byDiff[$meta.Difficulty]++
         $topicSolved[$meta.Topic]++
     } else {
@@ -309,14 +385,15 @@ Write-Host ("  Current streak : {0}" -f $currentStreak)
 Write-Host ("  Longest streak : {0}" -f $longestStreak)
 Write-Host ("  Avg / day      : {0}" -f $avgPerDay)
 Write-Host ("  ETA            : {0}" -f $etaStr)
+Write-Host ("  Fuzzy matches  : {0}" -f $fuzzyHits)
 
 if ($unmatched.Count -gt 0) {
     Write-Host ""
-    Write-Warning "$($unmatched.Count) folder(s) had submissions but did NOT match any slug in problems.json:"
+    Write-Warning "$($unmatched.Count) folder(s) had submissions but could not be matched (exact or fuzzy) to any slug in problems.json:"
     $unmatched | ForEach-Object { Write-Host "    $_" -ForegroundColor Yellow }
     Write-Host ""
-    Write-Host "  Fix: open problems.json and change the 'slug' value to match your actual folder name (case-insensitive)." -ForegroundColor Yellow
-    Write-Host "  These are still counted in 'Solved' but not in difficulty/topic breakdowns." -ForegroundColor Yellow
+    Write-Host "  Fix: open problems.json and set the 'slug' value close to your folder name (case-insensitive)." -ForegroundColor Yellow
+    Write-Host "  A ~50%+ token overlap is usually enough to auto-match on future runs." -ForegroundColor Yellow
 }
 
 Write-Host ""
