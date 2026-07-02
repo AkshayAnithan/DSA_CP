@@ -49,8 +49,8 @@
 
 | | 🟢 Easy | 🟡 Medium | 🔴 Hard |
 |:--|:-:|:-:|:-:|
-| **Solved** | `1 / 28` | `0 / 101` | `0 / 21` |
-| **Progress** | `▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱` | `▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱` | `▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱` |
+| **Solved** | `6 / 28` | `2 / 101` | `0 / 21` |
+| **Progress** | `▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱` | `▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱` | `▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱` |
 
 ### By language
 
@@ -59,7 +59,7 @@
 | ![cpp](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=cplusplus&logoColor=white) | `1` | `8%` |
 | ![cs](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=csharp&logoColor=white) | `11` | `92%` |
 
-_Last auto-update: 2026-07-02 16:19 · Run `Update-Stats.ps1` to refresh._
+_Last auto-update: 2026-07-02 16:54 · Run `Update-Stats.ps1` to refresh._
 <!-- AUTO:STATS:END -->
 
 ---
@@ -77,7 +77,7 @@ _Last auto-update: 2026-07-02 16:19 · Run `Update-Stats.ps1` to refresh._
 | 4 | [Stack](#4-stack) | 7 | `▱▱▱▱▱▱▱` 0/7 |
 | 5 | [Binary Search](#5-binary-search) | 7 | `▱▱▱▱▱▱▱` 0/7 |
 | 6 | [Linked List](#6-linked-list) | 11 | `▱▱▱▱▱▱▱▱▱▱▱` 0/11 |
-| 7 | [Trees](#7-trees) | 15 | `▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱` 1/15 |
+| 7 | [Trees](#7-trees) | 15 | `▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱` 8/15 |
 | 8 | [Heap / Priority Queue](#8-heap--priority-queue) | 7 | `▱▱▱▱▱▱▱` 0/7 |
 | 9 | [Backtracking](#9-backtracking) | 9 | `▱▱▱▱▱▱▱▱▱` 0/9 |
 | 10 | [Tries](#10-tries) | 3 | `▱▱▱` 0/3 |
