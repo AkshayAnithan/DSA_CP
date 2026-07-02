@@ -1,0 +1,52 @@
+name: Update README stats
+
+# Runs whenever code is pushed (including NeetCode auto-commits),
+# then commits the refreshed README back. Also runnable manually.
+on:
+  push:
+    branches: [main, master]
+    # Prevent infinite loop: don't trigger when the workflow itself edits README/workflow
+    paths-ignore:
+      - 'README.md'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+# Allow the workflow to push commits back to the repo
+permissions:
+  contents: write
+
+# Extra safety: cancel duplicate runs when many commits arrive at once
+concurrency:
+  group: update-stats-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    # Belt & suspenders: never react to the bot's own commits
+    if: github.actor != 'github-actions[bot]'
+
+    steps:
+      - name: Checkout repo (full history for accurate streak dates)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run stats updater
+        shell: pwsh
+        run: ./Update-Stats.ps1 -RepoRoot . -UseGit
+
+      - name: Commit and push if README changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet README.md; then
+            echo "No stats changes — nothing to commit."
+            exit 0
+          fi
+
+          git add README.md
+          git commit -m "Auto-update stats [skip ci]"
+          git push
