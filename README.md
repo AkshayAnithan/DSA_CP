@@ -36,9 +36,9 @@
 | Metric | Value | Target |
 |:---|:---:|:---:|
 | 🎯 **Solved** | `12 / 150` | `150` |
-| 📅 **Days active** | `6` | — |
+| 📅 **Days active** | `7` | — |
 | 📈 **Avg / day** | `0.71 behind` | `>= 2.0` |
-| 🔥 **Current streak** | `0 days` | keep alive |
+| 🔥 **Current streak** | `1 days` | keep alive |
 | 🏆 **Longest streak** | `2 days` | beat it |
 | ⏱️ **Avg time / problem** | `not tracked yet` | `< 30 min` |
 | 🔁 **Solved without hints** | `0` | maximize |
@@ -56,10 +56,10 @@
 
 | Language | Solved | Share |
 |:--|:-:|:-:|
-| ![cpp](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=cplusplus&logoColor=white) | `6` | `30%` |
-| ![cs](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=csharp&logoColor=white) | `14` | `70%` |
+| ![cpp](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=cplusplus&logoColor=white) | `6` | `29%` |
+| ![cs](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=csharp&logoColor=white) | `15` | `71%` |
 
-_Last auto-update: 2026-07-05 19:08 · Run `Update-Stats.ps1` to refresh._
+_Last auto-update: 2026-07-05 19:11 · Run `Update-Stats.ps1` to refresh._
 <!-- AUTO:STATS:END -->
 
 ---
