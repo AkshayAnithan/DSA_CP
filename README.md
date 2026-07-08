@@ -36,14 +36,14 @@
 | Metric | Value | Target |
 |:---|:---:|:---:|
 | 🎯 **Solved** | `13 / 150` | `150` |
-| 📅 **Days active** | `8` | — |
-| 📈 **Avg / day** | `0.68 behind` | `>= 2.0` |
-| 🔥 **Current streak** | `1 days` | keep alive |
+| 📅 **Days active** | `9` | — |
+| 📈 **Avg / day** | `0.65 behind` | `>= 2.0` |
+| 🔥 **Current streak** | `2 days` | keep alive |
 | 🏆 **Longest streak** | `2 days` | beat it |
 | ⏱️ **Avg time / problem** | `not tracked yet` | `< 30 min` |
 | 🔁 **Solved without hints** | `0` | maximize |
 | 📅 **Started** | `2026-06-19` | — |
-| 🏁 **ETA at current pace** | `2027-01-25` | — |
+| 🏁 **ETA at current pace** | `2027-02-04` | — |
 
 ### By difficulty
 
@@ -56,10 +56,10 @@
 
 | Language | Solved | Share |
 |:--|:-:|:-:|
-| ![cpp](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=cplusplus&logoColor=white) | `6` | `26%` |
-| ![cs](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=csharp&logoColor=white) | `17` | `74%` |
+| ![cpp](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=cplusplus&logoColor=white) | `7` | `29%` |
+| ![cs](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=csharp&logoColor=white) | `17` | `71%` |
 
-_Last auto-update: 2026-07-07 17:46 · Run `Update-Stats.ps1` to refresh._
+_Last auto-update: 2026-07-08 16:53 · Run `Update-Stats.ps1` to refresh._
 <!-- AUTO:STATS:END -->
 
 ---
