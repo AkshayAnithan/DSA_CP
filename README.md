@@ -56,10 +56,10 @@
 
 | Language | Solved | Share |
 |:--|:-:|:-:|
-| ![cpp](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=cplusplus&logoColor=white) | `39` | `59%` |
-| ![cs](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=csharp&logoColor=white) | `27` | `41%` |
+| ![cpp](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=cplusplus&logoColor=white) | `40` | `60%` |
+| ![cs](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=csharp&logoColor=white) | `27` | `40%` |
 
-_Last auto-update: 2026-08-05 11:23 · Run `Update-Stats.ps1` to refresh._
+_Last auto-update: 2026-08-05 11:27 · Run `Update-Stats.ps1` to refresh._
 <!-- AUTO:STATS:END -->
 
 ---
