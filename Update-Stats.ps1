@@ -327,11 +327,12 @@ _Last auto-update: $((Get-Date).ToString('yyyy-MM-dd HH:mm')) · Run ``Update-St
 $rows = New-Object 'System.Collections.Generic.List[string]'
 $i = 1
 foreach ($t in $data.topics) {
-    $done = $topicSolved[$t.name]
-    $tot  = $topicCounts[$t.name]
-    $bar  = ([string]([char]0x25B0) * $done) + ([string]([char]0x25B1) * ($tot - $done))
-    $anchor = New-Anchor $i $t.name
-    $rows.Add("| $i | [$($t.name)]($anchor) | $tot | ``$bar`` $done/$tot |")
+    $tot     = $topicCounts[$t.name]
+    $done    = [math]::Min($tot, [math]::Max(0, $topicSolved[$t.name]))
+    $rem     = [math]::Max(0, $tot - $done)
+    $bar     = ([string]([char]0x25B0) * $done) + ([string]([char]0x25B1) * $rem)
+    $anchor  = New-Anchor $i $t.name
+    $rows.Add("| $i | [$($t.name)]($anchor) | $tot | ``$bar`` $($topicSolved[$t.name])/$tot |")
     $i++
 }
 
